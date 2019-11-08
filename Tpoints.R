@@ -4,9 +4,10 @@
 # set test variables
 layer = "e5bf92e9-3323-4eb6-b051-7fe89b5174a9"
 query = 
+input
 
 #load pacakges
-require(c("bcdata", "dplyr", "sf"))
+require(c("bcdata", "dtidyverse", "sf", "mapView" ))
 
 
 
