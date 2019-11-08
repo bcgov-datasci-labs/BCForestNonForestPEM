@@ -12,6 +12,7 @@ library(mapview)
 
 #Directory Variable names
 AOI.dir <- 'inputs/AOI'
+Sent.dir <- 'data/archive'
 
 AOI<-st_read(file.path(AOI.dir,'DeceptionProjectBoundary.shp'))
 AOI<-st_set_crs(AOI,'+init=epsg:3005')
@@ -43,10 +44,17 @@ getSentinel_preview(records[7,])
 # Download
 datasets <- getSentinel_data(records = records[7, ])
 
+sentFile <- list.files(file.path(Sent.dir), pattern = ".zip", full.names = TRUE)[1]
+fc_list <- st_layers(sentFile)
+
+
+# Read as sf and calculate road lengths
+roads_sf <- read_sf(Rd_gdb, layer = "integrated_roads") %>%
+  mutate(rd_len = st_length(.))
+
 # Convert to TIFF
 datasets_prep <- unzip(datasets)
-BTMZip <- 'BCGW_78757263_1520272242999_7572.zip'
-unzip(file.path(BTMDir, BTMZip), exdir = file.path(BTMDir, "BTM"))
+
 
 jp2 <- list.files(path = "C:/Users/bevington/Dropbox/FLNRO_p1/!_Presentations/2019 11 05 R Geospatial/bcgov-r-geo-workshop/data/20191106_Day_2_PM_Raster/IMG_DATA", full.names = T)
 
