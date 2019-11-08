@@ -12,8 +12,7 @@ fields = c("BCLCS_LEVEL_1","BCLCS_LEVEL_2")
 aoi <- read_sf(aoifile)
 
 # query the data
-tpoly <- bcdc_query_geodata(layer) %>% #query_geodata will just query whats available, not acquire it
 tpoly <- bcdc_query_geodata(layer) %>%
   filter(INTERSECTS(aoi)) %>%
-  select(query_fields) %>% # this will filter data from geodata BEFORE it sends it over, so we're only grabbing the 2017 data from the web
   select(query_fields) %>%
+  collect()
