@@ -7,29 +7,41 @@ library(getSpatialData)
 library(raster)
 library(sf)
 library(sp)
+library(mapview)
+
 
 #Directory Variable names
 AOI.dir <- 'inputs/AOI'
 
+AOI<-st_read(file.path(AOI.dir,'DeceptionProjectBoundary.shp'))
+AOI<-st_set_crs(AOI,'+init=epsg:3005')
+#Set AOI, expects a "SpatialPolygonsDataFrame", check AOI class
+#class(AOI_sp)
+AOI_sp<-as(AOI,'Spatial')
+#getSpatialData::services_avail()
+
 # Manually Set an Area of Interest
-set_aoi()
+set_aoi(AOI_sp)
 
 # Login to Copernicus Data Hub (https://scihub.copernicus.eu/dhus/)
 login_CopHub(username = "bevingtona")
 set_archive("data/archive")
 
 # Use getSentinel_query to search for data (using the session AOI)
-records <- getSentinel_query(time_range = c("2019-05-28",
-                                            "2019-05-30"),
+records <- getSentinel_query(time_range = c("2018-07-01",
+                                            "2018-08-30"),
                              platform = "Sentinel-2")
-# Filter Records
-records_filtered <- records[which(records$processinglevel == "Level-1C"),] #filter by Level
+
+
+records <- records[which(records$cloudcoverpercentage < 10),] #filter by Level
+records <- records[which(records$processinglevel == "Level-1C"),] #filter by Level
 
 # Preview on Map
-# getSentinel_preview(records_filtered[1,])
+
+getSentinel_preview(records[7,])
 
 # Download
-datasets <- getSentinel_data(records = records_filtered[1, ])
+datasets <- getSentinel_data(records = records[7, ])
 
 # Convert to TIFF
 datasets_prep <- unzip(datasets)
@@ -54,4 +66,7 @@ jp2_60_crop <- crop(jp2_60, mask)
 
 jp2_10_crop_20 <- resample(jp2_10_crop, jp2_20_crop)
 
-writeRaster(x = stack(jp2_10_crop_20, jp2_20_crop), "T10UEE_20190529T191911_20m.tif")
+writeRaster(x = stack(jp2_10_cr
+
+
+op_20, jp2_20_crop), "T10UEE_20190529T191911_20m.tif")
