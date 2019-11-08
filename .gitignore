@@ -34,14 +34,15 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
-.Rproj.user
 
 
-/data
+#Ignore Raw Imagery
+/data/archive/
+/data/imagery/
 
 /tmp
+/data
 /out
-/archive
-
 /inputs/Satellite/
 
+.Rproj.user
