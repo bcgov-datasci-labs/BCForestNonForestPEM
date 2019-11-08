@@ -45,7 +45,8 @@ datasets <- getSentinel_data(records = records[7, ])
 
 # Convert to TIFF
 datasets_prep <- unzip(datasets)
-
+BTMZip <- 'BCGW_78757263_1520272242999_7572.zip'
+unzip(file.path(BTMDir, BTMZip), exdir = file.path(BTMDir, "BTM"))
 
 jp2 <- list.files(path = "C:/Users/bevington/Dropbox/FLNRO_p1/!_Presentations/2019 11 05 R Geospatial/bcgov-r-geo-workshop/data/20191106_Day_2_PM_Raster/IMG_DATA", full.names = T)
 
