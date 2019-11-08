@@ -1,4 +1,4 @@
-#accepts a polygon area of interests. Selects 
+#accepts a polygon area of interests. Selects
 #by a query to provide catagories, creates randome points for training. creates a training point crv.
 
 #load packages
@@ -13,6 +13,7 @@ aoi <- read_sf(aoifile)
 
 # query the data
 tpoly <- bcdc_query_geodata(layer) %>% #query_geodata will just query whats available, not acquire it
+tpoly <- bcdc_query_geodata(layer) %>%
   filter(INTERSECTS(aoi)) %>%
   select(query_fields) %>% # this will filter data from geodata BEFORE it sends it over, so we're only grabbing the 2017 data from the web
-  collect() # collect() will collect the data that you've queried
+  select(query_fields) %>%
