@@ -4,27 +4,70 @@ author: "Will MacKenzie and many more"
 date: "November 8, 2019"
 output: html_document
 ---
-This is the Hackthon project to predict whether Forest is 
+This is the master script for Hackthon project to predict Forest versus NonForest  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+rm(list=ls())
+library(sf)
+library(lwgeom)
+library(raster)
+library(sp)
+library(gdistance)
+library(stars)
+library(plyr)
+library(dplyr)
+library(foreach)
+library(doSNOW)
+library(stars)
+library(iterators)
+library(LearnGeom)
+library(tmap)
+library(viridis)
+library(shinyjs)
+library(formatR)
+library(tidyr)
+library(fasterize)
+library(randomForest)
+#library (here)
+library (reshape)
+library (ggplot2)
+library(scales)
+library(data.table)
+library(clhs)
+library(caret)
+library(tictoc)
+library(mapview)
+library (doParallel)
+#here()
 ```
 
 ## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r AOI}
+AOI_name <- "DeceptionProjectBoundary"
+AOI <- st_read (paste0("./inputs/AOI/", AOI_name, ".shp"))
+AOI <- st_set_crs (AOI, "+init=epsg:3005")
+st_crs(AOI)
+mapview(AOI)
+```
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r source inputs}
+source ("Tpoints.R") # training point script
+#
+source ("Covariates.R") # covariate script
+
+source ("ML.R") # machine learning script
 ```
 
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r predicted map, echo=FALSE}
+
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
