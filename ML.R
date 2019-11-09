@@ -23,7 +23,7 @@ filecov<-"rastLUT.csv"
 ycol <-"coords.x1"
 xcol<-"coords.x2"
 epsg <- 3005
-respV <- "T_W_WL"
+respV <- "T_W_WL" #What are T W and WL???
 
 #SuperLearner approach to ensemble machine learning that penalizes poor performing models
 
@@ -88,8 +88,9 @@ m = makeStackedLearner(base.learners = lrns,
                        predict.type = "prob", method = "stack.cv", super.learner="classif.glmnet")
 tmp = mlr::train(m, tsk)
 #tmp$learner.model$super.model$learner.model
-res = predict(tmp, newdata=meuse.grid@data)
-meuse.grid$mlr.om = res$data$response
-spplot(meuse.grid["mlr.om"])
-
+#res = predict(tmp, newdata=meuse.grid@data)
+res = predict(tmp, newdata=df)
+#meuse.grid$mlr.om = res$data$response
+df$mlr.om = res$data$response
+plot(df["mlr.om"])
 
