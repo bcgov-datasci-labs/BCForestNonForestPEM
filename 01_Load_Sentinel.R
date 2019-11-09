@@ -12,7 +12,7 @@ library(mapview)
 
 #Directory Variable names
 AOI.dir <- 'inputs/AOI'
-Sent.dir <- 'data/archive'
+Sent.dir <- 'satellite/archive'
 
 AOI<-st_read(file.path(AOI.dir,'DeceptionProjectBoundary.shp'))
 AOI<-st_set_crs(AOI,'+init=epsg:3005')
@@ -25,8 +25,8 @@ AOI_sp<-as(AOI,'Spatial')
 set_aoi(AOI_sp)
 
 # Login to Copernicus Data Hub (https://scihub.copernicus.eu/dhus/)
-login_CopHub(username = "bevingtona")
-set_archive("data/archive")
+login_CopHub(username = "whmacken")
+set_archive("satellite/archive")
 
 # Use getSentinel_query to search for data (using the session AOI)
 records <- getSentinel_query(time_range = c("2018-07-01",
@@ -47,13 +47,13 @@ datasets <- getSentinel_data(records = records[7, ])
 sentFile <- list.files(file.path(Sent.dir), pattern = ".zip", full.names = TRUE)[1]
 fc_list <- st_layers(sentFile)
 
-
-# Read as sf and calculate road lengths
-roads_sf <- read_sf(Rd_gdb, layer = "integrated_roads") %>%
-  mutate(rd_len = st_length(.))
-
-# Convert to TIFF
-datasets_prep <- unzip(datasets)
+#
+# # Read as sf and calculate road lengths
+# roads_sf <- read_sf(Rd_gdb, layer = "integrated_roads") %>%
+#   mutate(rd_len = st_length(.))
+#
+# # Convert to TIFF
+# datasets_prep <- unzip(datasets)
 
 
 jp2 <- list.files(path = "C:/Users/bevington/Dropbox/FLNRO_p1/!_Presentations/2019 11 05 R Geospatial/bcgov-r-geo-workshop/data/20191106_Day_2_PM_Raster/IMG_DATA", full.names = T)
@@ -75,7 +75,4 @@ jp2_60_crop <- crop(jp2_60, mask)
 
 jp2_10_crop_20 <- resample(jp2_10_crop, jp2_20_crop)
 
-writeRaster(x = stack(jp2_10_cr
-
-
-op_20, jp2_20_crop), "T10UEE_20190529T191911_20m.tif")
+writeRaster(x = stack(jp2_10_crop_20, jp2_20_crop), "T10UEE_20190529T191911_20m.tif")
