@@ -23,11 +23,7 @@ filecov<-"rastLUT.csv"
 ycol <-"coords.x1"
 xcol<-"coords.x2"
 epsg <- 3005
-<<<<<<< HEAD
-resespV <- "T_W_WL"
-=======
 respV <- "T_W_WL"
->>>>>>> 28ee97d29636bfa7c5007da7012a272b79c8040a
 
 #SuperLearner approach to ensemble machine learning that penalizes poor performing models
 
@@ -37,30 +33,20 @@ covList <- cov[,2, drop = TRUE]
 att.Tsp <- st_as_sf(att.T,
                         coords =c(ycol, xcol),
                         crs = epsg)
-mapview(att.Tsp)
-<<<<<<< HEAD
-covList
-#selects only covariates and response varibles
+
+#mapview is very slow but can be used to verify data
+#mapview(att.Tsp)
 
 df = att.T %>%
-  dplyr::select(covList, respV) #%>%
-=======
+  dplyr::select(covList, respV)
 
-#selects only covariates and response varibles
-df = att.T %>%
-  select(covList, respV) #%>% 
->>>>>>> 28ee97d29636bfa7c5007da7012a272b79c8040a
 dfcomp<-df[complete.cases(df),]
 
 fitControl <- trainControl(method="repeatedcv", number=3, repeats=2)
 
 #RandomForest
 mFit3 <- caret::train(T_W_WL~ahm_clip+ahm_clip+aspect1+B1_LANDSAT+B1_SENT2+B10_SENT2+B11_SENT2+B12_SENT2+B13_SENT2+B2_LANDSAT+B2_SENT2+B3_LANDSAT+B3_SENT2+B4_SENT2+B5_SENT2+B6_SENT2+B7_SENT2+B8_SENT2+B9_SENT2+bffp_clip+carea+cmd_clip+cplan+cprof+DAH+dd0_clip+dd18_clip+dd5_clip+effp_clip+elev+emt_clip+eref_clip+ext_clip+ffp_clip+map_clip+mar_clip+mat_clip+mcmt_clip+mrvbf+msp_clip+mwmt_clip+nffd_clip+pas_clip+rh_clip+shm_clip3+slope+TOPOwet+TPI,
-<<<<<<< HEAD
                     data=dfcomp, method="ranger",
-=======
-                    data=dfcomp, method="ranger", 
->>>>>>> 28ee97d29636bfa7c5007da7012a272b79c8040a
                     trControl=fitControl, na.action=na.omit)
 
 
