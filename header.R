@@ -4,9 +4,9 @@ library(readr)
 library(raster)
 
 TmpDir <- 'tmp'
-OutDir <- 'out'
-DataDir <- 'data'
-dataOutDir <- file.path(OutDir,'data')
+OutDir <- 'outputs'
+DataDir <- 'inputs'
+dataOutDir <- file.path(OutDir,'inputs')
 tileOutDir <- file.path(dataOutDir,'tile')
 
 dir.create(TmpDir, showWarnings = FALSE)
