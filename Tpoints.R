@@ -19,22 +19,26 @@ rstack <-
 #rstack <-
 field <- "BCLCS_LEVEL_1"
 
-#read in area of interest polygon
-aoi <- read_sf(aoifile)
+makeTpoints <- function(aoifile, layer, field, npoints) {
+  #read in area of interest polygon
+  aoi <- read_sf(aoifile)
 
-# download data from bcdata.
-tpoly <- bcdc_query_geodata(layer) %>%
-  bcdata::filter(INTERSECTS(aoi)) %>%
-  bcdata::select(!!field) %>% #!! will let you get into the variable field. Otherwise it will try to find a field called field.
-  collect()
+  # download data from bcdata.
+  tpoly <- bcdc_query_geodata(layer) %>%
+    bcdata::filter(INTERSECTS(aoi)) %>%
+    bcdata::select(!!field) %>% #!! will let you get into the variable field. Otherwise it will try to find a field called field.
+    collect()
 
-#create random points in the aoi
-points <- st_sample (aoi, size = npoints, type = "random")
-st_crs(points) <- 3005
-Tpoints <- st_intersection (points, tpoly)
+  #create random points in the aoi
+  points <- st_sample (aoi, size = npoints, type = "random")
+  st_crs(points) <- 3005
+  Tpoints <- st_intersection (points, tpoly) #THIS IS NOT WORKING YET!
 
-#raster:extract <-
+  return(points)#NEED TO CHANGE THIS TO Tpoints once line 35 is working.
+}
 
+
+points <- makeTpoints(aoifile, layer, field, npoints)
 ggplot2::ggplot()+
   geom_sf(data = tpoly, aes(fill = !!field))+
   geom_sf(data = points, size = 0.5, color = "yellow")
