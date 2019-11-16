@@ -26,7 +26,7 @@ makeTpoints <- function(aoifile, layer, field, npoints) {
   # download data from bcdata.
   tpoly <- bcdc_query_geodata(layer) %>%
     bcdata::filter(INTERSECTS(aoi)) %>%
-    bcdata::select(!!field) %>% #!! will let you get into the variable field. Otherwise it will try to find a field called field.
+    bcdata::select(field) %>% 
     collect()
 
   #create random points in the aoi
